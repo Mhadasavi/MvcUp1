@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MvcUp1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace MvcUp1.Data
         {
 
         }
+        public DbSet<Category> Category { get; set; }
     }
 }
