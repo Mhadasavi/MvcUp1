@@ -20,5 +20,17 @@ namespace MvcUp1.Controllers
             IEnumerable<Category> categoryList = _db.Category;
             return View(categoryList);
         }
+        //httpget
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Category category)
+        {
+            _db.Category.Add(category);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
