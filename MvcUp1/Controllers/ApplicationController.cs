@@ -20,5 +20,16 @@ namespace MvcUp1.Controllers
             IEnumerable<Application> application = _db.Application;
             return View(application);
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Application application)
+        {
+            _db.Application.Add(application);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
