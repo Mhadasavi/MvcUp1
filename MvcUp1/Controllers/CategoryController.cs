@@ -26,6 +26,7 @@ namespace MvcUp1.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
             if (ModelState.IsValid)
@@ -35,6 +36,63 @@ namespace MvcUp1.Controllers
                 return RedirectToAction("Index");
             }
             return View(category);
+        }
+        //get
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var category = _db.Category.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+        //post
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.Id = id;
+                _db.Category.Update(category);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+        //get
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var category = _db.Category.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost([FromRoute]int id)
+        {
+            var Category = _db.Category.Find(id);
+            if (Category == null)
+            {
+                return NotFound();
+            }
+            _db.Category.Remove(Category);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+
         }
     }
 }
