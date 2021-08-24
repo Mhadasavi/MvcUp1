@@ -10,6 +10,7 @@ namespace MvcUp1.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required (ErrorMessage ="Name should not be empty")]
         public String Name { get; set; }
     }
 }
