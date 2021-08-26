@@ -20,6 +20,6 @@ namespace MvcUp1.Models
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public virtual Category category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }
