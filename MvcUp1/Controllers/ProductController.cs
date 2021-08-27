@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcUp1.Data;
 using MvcUp1.Models;
 using System;
@@ -18,15 +19,21 @@ namespace MvcUp1.Controllers
         public IActionResult Index()
         {
             IEnumerable<Product> productList = _db.Product;
-            foreach(var objList in productList)
+            foreach (var objList in productList)
             {
-                objList.Category = _db.Category.FirstOrDefault(u=>u.Id==objList.CategoryId );
+                objList.Category = _db.Category.FirstOrDefault(u => u.Id == objList.CategoryId);
             }
             return View(productList);
         }
         //httpget
         public IActionResult Upsert(int? id)
         {
+            IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+            ViewBag.CategoryDropDown = CategoryDropDown;
             Product product = new Product();
             if (id == null)
             {
@@ -70,7 +77,7 @@ namespace MvcUp1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             var Category = _db.Category.Find(id);
             if (Category == null)
