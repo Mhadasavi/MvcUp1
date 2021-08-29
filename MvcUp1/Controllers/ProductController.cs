@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcUp1.Data;
 using MvcUp1.Models;
+using MvcUp1.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,27 +29,36 @@ namespace MvcUp1.Controllers
         //httpget
         public IActionResult Upsert(int? id)
         {
-            IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+            //IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+            //{
+            //    Text = i.Name,
+            //    Value = i.Id.ToString()
+            //});
+            ////            ViewBag.CategoryDropDown = CategoryDropDown;
+            //ViewData["CategoryDropDown"] = CategoryDropDown;
+
+            //Product product = new Product();
+            ProductViewModel productViewModel = new ProductViewModel()
             {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
-            //            ViewBag.CategoryDropDown = CategoryDropDown;
-            ViewData["CategoryDropDown"] = CategoryDropDown;
-                
-            Product product = new Product();
+                product = new Product(),
+                CategorySelectList = _db.Category.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
             if (id == null)
             {
-                return View(product);
+                return View(productViewModel);
             }
             else
             {
-                product = _db.Product.Find(id);
-                if (product == null)
+                productViewModel.product = _db.Product.Find(id);
+                if (productViewModel.product == null)
                 {
                     return NotFound();
                 }
-                return View(product);
+                return View(productViewModel);
             }
         }
         [HttpPost]

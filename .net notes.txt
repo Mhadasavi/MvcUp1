@@ -4,9 +4,15 @@
   Any number of properties and values can be assigned to viewbag.
   ViewBag's life only lasts during the current http request. Viewbag values will be null if redirection occurs.
   ViewBag is actually a wrapper around ViewData.
-
+  ViewBag internally inserts data into ViewData Dictionary. So the key of viewdata an d property of viewbag must not match.
 * ViewData is used to send data from controller to view, not vice-versa.
   Ideal for situations in which the temporary data is not in a model.
   ViewData is derived from ViewDataDictionary which is a dictionary type.
   ViewData value must be type cast before use.
   ViewBag's life only lasts during the current http request. Viewbag values will be null if redirection occurs.
+
+* ViewBag, ViewData and tempdata makes the model loosely typed.
+  ViewModel contain fields that are represented in the view.
+  ViewModel can have specific validation rules using data annotations.
+  It have multiple entities or objects from different data models or data source.
+  It helps to implement strongly typed views.
