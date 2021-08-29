@@ -33,7 +33,9 @@ namespace MvcUp1.Controllers
                 Text = i.Name,
                 Value = i.Id.ToString()
             });
-            ViewBag.CategoryDropDown = CategoryDropDown;
+            //            ViewBag.CategoryDropDown = CategoryDropDown;
+            ViewData["CategoryDropDown"] = CategoryDropDown;
+                
             Product product = new Product();
             if (id == null)
             {

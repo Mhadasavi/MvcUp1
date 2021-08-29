@@ -1,1 +1,12 @@
-viewbag is used to send data from controller to view.
+* viewbag is used to send data from controller to view, not vice-versa. 
+  Ideal for situations in which the temporary data is not in a model. 
+  It is a dynamic property that takes advantage of the new dynamic features in C# 4.0.
+  Any number of properties and values can be assigned to viewbag.
+  ViewBag's life only lasts during the current http request. Viewbag values will be null if redirection occurs.
+  ViewBag is actually a wrapper around ViewData.
+
+* ViewData is used to send data from controller to view, not vice-versa.
+  Ideal for situations in which the temporary data is not in a model.
+  ViewData is derived from ViewDataDictionary which is a dictionary type.
+  ViewData value must be type cast before use.
+  ViewBag's life only lasts during the current http request. Viewbag values will be null if redirection occurs.
