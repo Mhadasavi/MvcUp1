@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcUp1.Data;
 using MvcUp1.Models;
+using MvcUp1.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,28 +20,45 @@ namespace MvcUp1.Controllers
         public IActionResult Index()
         {
             IEnumerable<Product> productList = _db.Product;
-            foreach(var objList in productList)
+            foreach (var objList in productList)
             {
-                objList.Category = _db.Category.FirstOrDefault(u=>u.Id==objList.CategoryId );
+                objList.Category = _db.Category.FirstOrDefault(u => u.Id == objList.CategoryId);
             }
             return View(productList);
         }
         //httpget
         public IActionResult Upsert(int? id)
         {
-            Product product = new Product();
+            //IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+            //{
+            //    Text = i.Name,
+            //    Value = i.Id.ToString()
+            //});
+            ////            ViewBag.CategoryDropDown = CategoryDropDown;
+            //ViewData["CategoryDropDown"] = CategoryDropDown;
+
+            //Product product = new Product();
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                product = new Product(),
+                CategorySelectList = _db.Category.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
             if (id == null)
             {
-                return View(product);
+                return View(productViewModel);
             }
             else
             {
-                product = _db.Product.Find(id);
-                if (product == null)
+                productViewModel.product = _db.Product.Find(id);
+                if (productViewModel.product == null)
                 {
                     return NotFound();
                 }
-                return View(product);
+                return View(productViewModel);
             }
         }
         [HttpPost]
@@ -70,7 +89,7 @@ namespace MvcUp1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             var Category = _db.Category.Find(id);
             if (Category == null)

@@ -1,14 +1,14 @@
-﻿@model MvcUp1.Models.Product
+﻿@model MvcUp1.Models.ViewModel.ProductViewModel
 @{
     var title = "Create Product";
 }
 
 <form method="post" enctype="multipart/form-data">
     @{
-        if (Model.Id != 0)
+        if (Model.product.Id != 0)
         {
             title = "Update Product";
-            <input asp-for="Id" hidden />
+            <input asp-for="product.Id" hidden />
         }
     }
     <div class="border p-3">
@@ -19,29 +19,29 @@
             <div class="col-8">
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="Name"></label>
+                        <label asp-for="product.Name"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <input asp-for="product.Name" class="form-control" />
+                        <span asp-validation-for="product.Name" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="Price"></label>
+                        <label asp-for="product.Price"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Price" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
+                        <input asp-for="product.Price" class="form-control" />
+                        <span asp-validation-for="product.Price" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="Description"></label>
+                        <label asp-for="product.Description"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <input asp-for="product.Description" class="form-control" />
+                        <span asp-validation-for="product.Description" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -49,15 +49,25 @@
                         Image
                     </div>
                     <div class="col-8">
-                        <input type="image" name="files" id="uploadBox" multiple class="form-control" />
-
+                        <input type="file" name="files" id="uploadBox" multiple class="form-control" />
                     </div>
                 </div>
-               
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="product.CategoryId"></label>
+                    </div>
+                    <div class="col-8">
+                        @*  <select asp-for="CategoryId" asp-items="@ViewBag.CategoryDropDown"class="form-control" >*@
+                        <select asp-for="product.CategoryId" asp-items="@Model.CategorySelectList" class="form-control">
+                            <option disabled selected>--Select Category--</option>
+                        </select>
+                        <span asp-validation-for="product.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>               
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">
                         <div class="col">
-                            @if (Model.Id != 0)
+                            @if (Model.product.Id != 0)
                                 {
                                     <input type="submit" class="btn btn-info w-100" value="Update" />
                                 }
