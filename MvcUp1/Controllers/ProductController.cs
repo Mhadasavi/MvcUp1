@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcUp1.Data;
 using MvcUp1.Models;
 using MvcUp1.Models.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +14,12 @@ namespace MvcUp1.Controllers
 {
     public class ProductController : Controller
     {
-        private ApplicationDbContext _db;
-        public ProductController(ApplicationDbContext db)
+        private readonly ApplicationDbContext _db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -63,15 +67,34 @@ namespace MvcUp1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category category)
+        public IActionResult Upsert(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Add(category);
+                var files = HttpContext.Request.Form.Files;
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                if (productViewModel.product.Id == 0)
+                {
+                    string upload = webRootPath + WC.ImagePath;
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(files[0].FileName);
+
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName+extension),FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+                    productViewModel.product.Image = fileName + extension;
+                    _db.Product.Add(productViewModel.product);
+
+                }
+                else
+                {
+
+                }
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(productViewModel);
         }
         //get
         public IActionResult Delete(int? id)
