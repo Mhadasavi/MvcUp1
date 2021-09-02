@@ -84,7 +84,10 @@
             </div>
             <div class="col-4">
                 @*Keep this empty*@
+                @if (Model.product.Id != 0)
+                {
                 <img src="@WC.ImagePath@Model.product.Image" width="100%" style="border-radius:5px; border: 1px solid #bbb" />
+                }
             </div>
         </div>
         <div asp-validation-summary="All" class="text-danger "></div>
