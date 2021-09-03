@@ -9,6 +9,7 @@ namespace MvcUp1.Models.ViewModel
     public class ProductViewModel
     {
         public Product product { get; set; }
-        public IEnumerable<SelectListItem> CategorySelectList{ get; set; }
+        public IEnumerable<SelectListItem> CategorySelectList { get; set; }
+        public IEnumerable<SelectListItem> ApplicationSelectList { get; set; }
     }
 }
