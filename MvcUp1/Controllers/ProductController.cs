@@ -28,6 +28,7 @@ namespace MvcUp1.Controllers
             foreach (var objList in productList)
             {
                 objList.Category = _db.Category.FirstOrDefault(u => u.Id == objList.CategoryId);
+                objList.Application = _db.Application.FirstOrDefault(u => u.Id == objList.ApplicationId);
             }
             return View(productList);
         }
@@ -47,6 +48,11 @@ namespace MvcUp1.Controllers
             {
                 product = new Product(),
                 CategorySelectList = _db.Category.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                }),
+                ApplicationSelectList = _db.Application.Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
@@ -119,6 +125,11 @@ namespace MvcUp1.Controllers
                 return RedirectToAction("Index");
             }
             productViewModel.CategorySelectList = _db.Category.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+            productViewModel.ApplicationSelectList = _db.Application.Select(i => new SelectListItem
             {
                 Text = i.Name,
                 Value = i.Id.ToString()
