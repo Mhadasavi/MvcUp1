@@ -80,7 +80,7 @@ namespace MvcUp1.Controllers
                     string fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(files[0].FileName);
 
-                    using (var fileStream = new FileStream(Path.Combine(upload, fileName+extension),FileMode.Create))
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
                     {
                         files[0].CopyTo(fileStream);
                     }
@@ -132,8 +132,8 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var productFromDb = _db.Product.Find(id);
-            if (productFromDb== null)
+            Product productFromDb = _db.Product.Include(u => u.Category).FirstOrDefault(u => u.Id == id);
+            if (productFromDb == null)
             {
                 return NotFound();
             }
@@ -143,12 +143,22 @@ namespace MvcUp1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id)
         {
-            var Category = _db.Category.Find(id);
-            if (Category == null)
+            var product = _db.Product.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(Category);
+
+            string upload = _webHostEnvironment.WebRootPath + WC.ImagePath;
+
+            var oldFile = Path.Combine(upload, product.Image);
+
+            if (System.IO.File.Exists(oldFile))
+            {
+                System.IO.File.Delete(oldFile);
+            }
+
+            _db.Product.Remove(product);
             _db.SaveChanges();
             return RedirectToAction("Index");
 
