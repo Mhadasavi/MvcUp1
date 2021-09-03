@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MvcUp1.Data;
 using MvcUp1.Models;
 using MvcUp1.Models.ViewModel;
@@ -79,7 +80,7 @@ namespace MvcUp1.Controllers
                     string fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(files[0].FileName);
 
-                    using (var fileStream = new FileStream(Path.Combine(upload, fileName+extension),FileMode.Create))
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
                     {
                         files[0].CopyTo(fileStream);
                     }
@@ -89,11 +90,39 @@ namespace MvcUp1.Controllers
                 }
                 else
                 {
+                    var objFromDb = _db.Product.AsNoTracking().FirstOrDefault(i => i.Id == productViewModel.product.Id);
+                    if (files.Count > 0)
+                    {
+                        string upload = webRootPath + WC.ImagePath;
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = Path.GetExtension(files[0].FileName);
 
+                        var oldFile = Path.Combine(upload, objFromDb.Image);
+
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            files[0].CopyTo(fileStream);
+                        }
+                        productViewModel.product.Image = fileName + extension;
+                    }
+                    else
+                    {
+                        productViewModel.product.Image = objFromDb.Image;
+                    }
+                    _db.Product.Update(productViewModel.product);
                 }
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            productViewModel.CategorySelectList = _db.Category.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
             return View(productViewModel);
         }
         //get
@@ -103,23 +132,33 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var category = _db.Category.Find(id);
-            if (category == null)
+            Product productFromDb = _db.Product.Include(u => u.Category).FirstOrDefault(u => u.Id == id);
+            if (productFromDb == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(productFromDb);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id)
         {
-            var Category = _db.Category.Find(id);
-            if (Category == null)
+            var product = _db.Product.Find(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(Category);
+
+            string upload = _webHostEnvironment.WebRootPath + WC.ImagePath;
+
+            var oldFile = Path.Combine(upload, product.Image);
+
+            if (System.IO.File.Exists(oldFile))
+            {
+                System.IO.File.Delete(oldFile);
+            }
+
+            _db.Product.Remove(product);
             _db.SaveChanges();
             return RedirectToAction("Index");
 
