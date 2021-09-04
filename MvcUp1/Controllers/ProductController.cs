@@ -143,7 +143,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            Product productFromDb = _db.Product.Include(u => u.Category).FirstOrDefault(u => u.Id == id);
+            Product productFromDb = _db.Product.Include(u => u.Category).Include(u=>u.Application).FirstOrDefault(u => u.Id == id);
             if (productFromDb == null)
             {
                 return NotFound();
