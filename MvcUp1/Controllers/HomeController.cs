@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MvcUp1.Data;
 using MvcUp1.Models;
+using MvcUp1.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,14 +15,20 @@ namespace MvcUp1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _db;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
         public IActionResult Index()
         {
+            HomeViewModel homeViewModel = new HomeViewModel()
+            {
+                Product = _db.Product.Include(u => u.Category).Include(u => u.Application),
+                Category = _db.Category
+            };
             return View();
         }
 
