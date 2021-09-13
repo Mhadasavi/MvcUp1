@@ -29,7 +29,7 @@ namespace MvcUp1.Controllers
                 Product = _db.Product.Include(u => u.Category).Include(u => u.Application),
                 Category = _db.Category
             };
-            return View();
+            return View(homeViewModel);
         }
 
         public IActionResult Privacy()
