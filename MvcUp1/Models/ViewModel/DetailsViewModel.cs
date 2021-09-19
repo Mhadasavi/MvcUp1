@@ -12,6 +12,6 @@ namespace MvcUp1.Models.ViewModel
             Product = new Product();
         }
         public Product Product { get; set; }
-        public bool IsExist { get; set; }
+        public bool ExistInCart { get; set; }
     }
 }
