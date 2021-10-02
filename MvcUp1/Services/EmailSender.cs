@@ -1,6 +1,7 @@
 ﻿using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,26 +12,33 @@ namespace MvcUp1.Services
 {
     public class EmailSender : IEmailSender
     {
+        private readonly IConfiguration _configuration;
+        public MailJetSetting _mailJetSetting { get; set; }
+        public EmailSender(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         Task IEmailSender.SendEmailAsync(string email, string subject, string htmlMessage)
         {
             return Execute(email, subject, htmlMessage);
         }
-        public async Task Execute(string email, string subject, string body)
+        public async Task<MailjetResponse> Execute(string email, string subject, string body)
         {
-            MailjetClient client = new MailjetClient(("97017448c2993fcf9fe49266b8135a24"), ("45c4b230001ea0e1a0b018a7f4e6843e"))
+            _mailJetSetting = _configuration.GetSection("MailJet").Get<MailJetSetting>();
+            MailjetClient client = new MailjetClient((_mailJetSetting.ApiKey), (_mailJetSetting.SecretKey))
             {
                 //Version = ApiVersion.V3_1,
             };
             MailjetRequest request = new MailjetRequest
             {
-                Resource = Send.Resource,
+                Resource = SendV31.Resource,
             }
              .Property(Send.Messages, new JArray {
      new JObject {
       {
        "From",
        new JObject {
-        {"Email", email},
+        {"Email", "uchaudhary57@gmail.com"},
         {"Name", "Marcus"}
        }
       }, {
@@ -61,7 +69,9 @@ namespace MvcUp1.Services
       }
      }
              });
-            await client.PostAsync(request);
+           MailjetResponse response= await client.PostAsync(request);
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            return response;
         }
     }
 }
