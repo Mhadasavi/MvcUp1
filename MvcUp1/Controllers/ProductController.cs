@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcUp1.Data;
 using MvcUp1.Models;
 using MvcUp1.Models.ViewModel;
+using MvcUp1_Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace MvcUp1.Controllers
 {
-    [Authorize(Roles=WC.AdminRole)]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;

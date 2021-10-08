@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Services
+namespace MvcUp1_Services
 {
     public class MailJetSetting
     {

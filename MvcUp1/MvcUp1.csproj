@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\Product\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MvcUp2_Utility\MvcUp1_Services.csproj" />
   </ItemGroup>
 
 </Project>
