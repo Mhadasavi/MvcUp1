@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1
+namespace MvcUp1_Services
 {
     public static class WC
     {

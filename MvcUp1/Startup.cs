@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MvcUp1.Data;
-using MvcUp1.Services;
+using MvcUp1_Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

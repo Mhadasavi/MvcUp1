@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Services
+namespace MvcUp1_Services
 {
     public static class SessionExtensions
     {
