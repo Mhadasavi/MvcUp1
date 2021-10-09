@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MvcUp1_Model\MvcUp1_Model.csproj" />
     <ProjectReference Include="..\MvcUp2_Utility\MvcUp1_Services.csproj" />
   </ItemGroup>
 

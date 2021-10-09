@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Models
+namespace MvcUp1_Model
 {
     public class Product
     {

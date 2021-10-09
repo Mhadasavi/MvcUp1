@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcUp1.Data;
-using MvcUp1.Models;
+using MvcUp1_Model;
 using MvcUp1_Services;
 using System;
 using System.Collections.Generic;

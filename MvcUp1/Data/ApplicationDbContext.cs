@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MvcUp1.Models;
+using MvcUp1_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

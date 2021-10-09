@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Models.ViewModel
+namespace MvcUp1_Model.ViewModel
 {
     public class ProductViewModel
     {
-        public Product product { get; set; }
+        public Product product { get; set; } 
         public IEnumerable<SelectListItem> CategorySelectList { get; set; }
         public IEnumerable<SelectListItem> ApplicationSelectList { get; set; }
     }
