@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MvcUp1.Data;
+using MvcUp1_Data;
 
-namespace MvcUp1.Migrations
+namespace MvcUp1_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210825061227_addRequiredFields")]
-    partial class addRequiredFields
+    [Migration("20210816060903_ApplicationModel")]
+    partial class ApplicationModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,16 +22,15 @@ namespace MvcUp1.Migrations
 
             modelBuilder.Entity("MvcUp1_Model.Application", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("Application");
                 });
@@ -47,7 +46,6 @@ namespace MvcUp1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

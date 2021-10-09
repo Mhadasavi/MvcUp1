@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Data
+namespace MvcUp1_Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
