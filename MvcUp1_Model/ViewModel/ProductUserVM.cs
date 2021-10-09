@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MvcUp1.Models.ViewModel
+namespace MvcUp1_Model.ViewModel
 {
     public class ProductUserVM
     {

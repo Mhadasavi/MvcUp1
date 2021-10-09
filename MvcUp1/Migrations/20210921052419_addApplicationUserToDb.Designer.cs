@@ -227,7 +227,7 @@ namespace MvcUp1.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MvcUp1.Models.Application", b =>
+            modelBuilder.Entity("MvcUp1_Model.Application", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,7 +243,7 @@ namespace MvcUp1.Migrations
                     b.ToTable("Application");
                 });
 
-            modelBuilder.Entity("MvcUp1.Models.Category", b =>
+            modelBuilder.Entity("MvcUp1_Model.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,7 +262,7 @@ namespace MvcUp1.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("MvcUp1.Models.Product", b =>
+            modelBuilder.Entity("MvcUp1_Model.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,7 +300,7 @@ namespace MvcUp1.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("MvcUp1.Models.ApplicationUser", b =>
+            modelBuilder.Entity("MvcUp1_Model.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -361,15 +361,15 @@ namespace MvcUp1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MvcUp1.Models.Product", b =>
+            modelBuilder.Entity("MvcUp1_Model.Product", b =>
                 {
-                    b.HasOne("MvcUp1.Models.Application", "Application")
+                    b.HasOne("MvcUp1_Model.Application", "Application")
                         .WithMany()
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MvcUp1.Models.Category", "Category")
+                    b.HasOne("MvcUp1_Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
