@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MvcUp1.Migrations
+namespace MvcUp1_Data.Migrations
 {
     public partial class scaffoldingIdentityRazorClassLib : Migration
     {

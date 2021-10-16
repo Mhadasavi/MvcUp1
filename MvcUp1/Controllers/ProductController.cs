@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MvcUp1.Data;
+using MvcUp1_Data;
 using MvcUp1_Model;
 using MvcUp1_Model.ViewModel;
 using MvcUp1_Services;

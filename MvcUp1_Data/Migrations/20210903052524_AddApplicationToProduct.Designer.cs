@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MvcUp1.Data;
+using MvcUp1_Data;
 
-namespace MvcUp1.Migrations
+namespace MvcUp1_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210903052524_AddApplicationToProduct")]
