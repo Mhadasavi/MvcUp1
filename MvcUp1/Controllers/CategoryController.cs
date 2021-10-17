@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcUp1_Data;
+using MvcUp1_Data.Repository.IRepository;
 using MvcUp1_Model;
 using MvcUp1_Services;
 using System;
@@ -13,14 +14,14 @@ namespace MvcUp1.Controllers
     [Authorize(Roles = WC.AdminRole)]
     public class CategoryController : Controller
     {
-        private ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _db = db;
+            _categoryRepository = categoryRepository;
         }
         public IActionResult Index()
         {
-            IEnumerable<Category> categoryList = _db.Category;
+            IEnumerable<Category> categoryList = _categoryRepository.GetAll();
             return View(categoryList);
         }
         //httpget
@@ -34,8 +35,8 @@ namespace MvcUp1.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Add(category);
-                _db.SaveChanges();
+                _categoryRepository.Add(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -47,7 +48,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var category = _db.Category.Find(id);
+            var category = _categoryRepository.Find(id.GetValueOrDefault());
             if (category == null)
             {
                 return NotFound();
@@ -63,8 +64,8 @@ namespace MvcUp1.Controllers
             if (ModelState.IsValid)
             {
                 category.Id = id;
-                _db.Category.Update(category);
-                _db.SaveChanges();
+                _categoryRepository.Update(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -76,7 +77,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var category = _db.Category.Find(id);
+            var category = _categoryRepository.Find(id.GetValueOrDefault());
             if (category == null)
             {
                 return NotFound();
@@ -85,15 +86,15 @@ namespace MvcUp1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int id)
+        public IActionResult DeletePost([FromRoute]int? id)
         {
-            var Category = _db.Category.Find(id);
+            var Category = _categoryRepository.Find(id.GetValueOrDefault());
             if (Category == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(Category);
-            _db.SaveChanges();
+            _categoryRepository.Remove(Category);
+            _categoryRepository.Save();
             return RedirectToAction("Index");
 
         }

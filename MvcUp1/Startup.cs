@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MvcUp1_Data;
+using MvcUp1_Data.Repository;
+using MvcUp1_Data.Repository.IRepository;
 using MvcUp1_Services;
 using System;
 using System.Collections.Generic;
@@ -34,7 +36,7 @@ namespace MvcUp1
                 .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddTransient<IEmailSender, EmailSender>();
-
+            services.AddScoped<ICategoryRepository,CategoryRepository>();//add dependency injection
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();//add session
             services.AddSession(options =>
