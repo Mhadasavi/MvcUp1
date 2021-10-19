@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcUp1_Data;
+using MvcUp1_Data.Repository.IRepository;
 using MvcUp1_Model;
 using MvcUp1_Model.ViewModel;
 using MvcUp1_Services;
@@ -16,27 +17,27 @@ namespace MvcUp1.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IProductRepository _productRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
         {
-            _db = db;
+            _productRepository = productRepository;
             _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _db.Product;
-            foreach (var objList in productList)
-            {
-                objList.Category = _db.Category.FirstOrDefault(u => u.Id == objList.CategoryId);
-                objList.Application = _db.Application.FirstOrDefault(u => u.Id == objList.ApplicationId);
-            }
+            IEnumerable<Product> productList = _productRepository.GetAll(includeProperties: "Category,Application");
+            //foreach (var objList in productList)
+            //{
+            //    objList.Category = _productRepository.Category.FirstOrDefault(u => u.Id == objList.CategoryId);
+            //    objList.Application = _productRepository.Application.FirstOrDefault(u => u.Id == objList.ApplicationId);
+            //}
             return View(productList);
         }
         //httpget
         public IActionResult Upsert(int? id)
         {
-            //IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+            //IEnumerable<SelectListItem> CategoryDropDown = _productRepository.Category.Select(i => new SelectListItem
             //{
             //    Text = i.Name,
             //    Value = i.Id.ToString()
@@ -48,16 +49,8 @@ namespace MvcUp1.Controllers
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 product = new Product(),
-                CategorySelectList = _db.Category.Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                }),
-                ApplicationSelectList = _db.Application.Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                CategorySelectList = _productRepository.GetAllDropDownList(WC.CategoryName),
+                ApplicationSelectList = _productRepository.GetAllDropDownList(WC.ApplicationName)
             };
             if (id == null)
             {
@@ -65,7 +58,7 @@ namespace MvcUp1.Controllers
             }
             else
             {
-                productViewModel.product = _db.Product.Find(id);
+                productViewModel.product = _productRepository.Find(id.GetValueOrDefault());
                 if (productViewModel.product == null)
                 {
                     return NotFound();
@@ -92,12 +85,12 @@ namespace MvcUp1.Controllers
                         files[0].CopyTo(fileStream);
                     }
                     productViewModel.product.Image = fileName + extension;
-                    _db.Product.Add(productViewModel.product);
+                    _productRepository.Add(productViewModel.product);
 
                 }
                 else
                 {
-                    var objFromDb = _db.Product.AsNoTracking().FirstOrDefault(i => i.Id == productViewModel.product.Id);
+                    var objFromDb = _productRepository.FirstOrDefault(i => i.Id == productViewModel.product.Id,isTracking:false);
                     if (files.Count > 0)
                     {
                         string upload = webRootPath + WC.ImagePath;
@@ -120,21 +113,13 @@ namespace MvcUp1.Controllers
                     {
                         productViewModel.product.Image = objFromDb.Image;
                     }
-                    _db.Product.Update(productViewModel.product);
+                    _productRepository.Update(productViewModel.product);
                 }
-                _db.SaveChanges();
+                _productRepository.Save();
                 return RedirectToAction("Index");
             }
-            productViewModel.CategorySelectList = _db.Category.Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
-            productViewModel.ApplicationSelectList = _db.Application.Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
+            productViewModel.CategorySelectList = _productRepository.GetAllDropDownList(WC.CategoryName);
+            productViewModel.ApplicationSelectList = _productRepository.GetAllDropDownList(WC.ApplicationName);
             return View(productViewModel);
         }
         //get
@@ -144,7 +129,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            Product productFromDb = _db.Product.Include(u => u.Category).Include(u=>u.Application).FirstOrDefault(u => u.Id == id);
+            Product productFromDb = _productRepository.FirstOrDefault(u=>u.Id==id,includeProperties: "Category,Application");
             if (productFromDb == null)
             {
                 return NotFound();
@@ -155,7 +140,7 @@ namespace MvcUp1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id)
         {
-            var product = _db.Product.Find(id);
+            var product = _productRepository.Find(id);
             if (product == null)
             {
                 return NotFound();
@@ -170,8 +155,8 @@ namespace MvcUp1.Controllers
                 System.IO.File.Delete(oldFile);
             }
 
-            _db.Product.Remove(product);
-            _db.SaveChanges();
+            _productRepository.Remove(product);
+            _productRepository.Save();
             return RedirectToAction("Index");
 
         }

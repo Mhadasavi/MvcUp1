@@ -11,5 +11,7 @@ namespace MvcUp1_Services
         public static string SessionCart = "ShoppingCartSession";
         public const string AdminRole = "Admin";
         public static string CustomerRole = "Customer";
+        public static string CategoryName = "Category";
+        public static string ApplicationName = "Application";
     }
 }

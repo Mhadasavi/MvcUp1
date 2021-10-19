@@ -37,6 +37,8 @@ namespace MvcUp1
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<ICategoryRepository,CategoryRepository>();//add dependency injection
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();//add session
             services.AddSession(options =>

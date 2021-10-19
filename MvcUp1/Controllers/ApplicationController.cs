@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcUp1_Data;
+using MvcUp1_Data.Repository.IRepository;
 using MvcUp1_Model;
 using MvcUp1_Services;
 using System;
@@ -13,14 +14,14 @@ namespace MvcUp1.Controllers
     [Authorize(Roles = WC.AdminRole)]
     public class ApplicationController : Controller
     {
-        private ApplicationDbContext _db;
-        public ApplicationController(ApplicationDbContext db)
+        private readonly IApplicationRepository _applicationRepository;
+        public ApplicationController(IApplicationRepository applicationRepository)
         {
-            _db = db;
+            _applicationRepository = applicationRepository;
         }
         public IActionResult Index()
         {
-            IEnumerable<Application> application = _db.Application;
+            IEnumerable<Application> application = _applicationRepository.GetAll();
             return View(application);
         }
         public IActionResult Create()
@@ -30,8 +31,8 @@ namespace MvcUp1.Controllers
         [HttpPost]
         public IActionResult Create(Application application)
         {
-            _db.Application.Add(application);
-            _db.SaveChanges();
+            _applicationRepository.Add(application);
+            _applicationRepository.Save();
             return RedirectToAction("Index");
         }//get
         public IActionResult Edit(int? id)
@@ -40,7 +41,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var Application = _db.Application.Find(id);
+            var Application = _applicationRepository.Find(id.GetValueOrDefault());
             if (Application == null)
             {
                 return NotFound();
@@ -54,8 +55,8 @@ namespace MvcUp1.Controllers
             if (ModelState.IsValid)
             {
                 application.Id = id;
-                _db.Application.Update(application);
-                _db.SaveChanges();
+                _applicationRepository.Update(application);
+                _applicationRepository.Save();
                 return RedirectToAction("Index");
             }
             return View(application);
@@ -66,7 +67,7 @@ namespace MvcUp1.Controllers
             {
                 return NotFound();
             }
-            var Application = _db.Application.Find(id);
+            var Application = _applicationRepository.Find(id.GetValueOrDefault());
             if (Application == null)
             {
                 return NotFound();
@@ -77,13 +78,13 @@ namespace MvcUp1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id)
         {
-            var application = _db.Application.Find(id);
+            var application = _applicationRepository.Find(id);
             if (application==null)
             {
                 return NotFound();
             }
-            _db.Application.Remove(application);
-            _db.SaveChanges();
+            _applicationRepository.Remove(application);
+            _applicationRepository.Save();
             return RedirectToAction("Index");
         }
     }
