@@ -39,6 +39,8 @@ namespace MvcUp1
             services.AddScoped<ICategoryRepository,CategoryRepository>();//add dependency injection
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IInquiryHeaderRepository, InquiryHeaderRepository>();
+            services.AddScoped<IInquiryDetailRepository, InquiryDetailRepository>();
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();//add session
             services.AddSession(options =>
