@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvcUp1_Data;
+using MvcUp1_Data.Repository.IRepository;
 using MvcUp1_Model;
 using MvcUp1_Model.ViewModel;
 using MvcUp1_Services;
@@ -17,19 +18,20 @@ namespace MvcUp1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _db;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
-            _logger = logger;
-            _db = db;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
             HomeViewModel homeViewModel = new HomeViewModel()
             {
-                Product = _db.Product.Include(u => u.Category).Include(u => u.Application),
-                Category = _db.Category
+                Product = _productRepository.GetAll(includeProperties: "Category,Application"),
+                Category = _categoryRepository.GetAll()
             };
             return View(homeViewModel);
         }
@@ -44,8 +46,7 @@ namespace MvcUp1.Controllers
 
             DetailsViewModel detailsViewModel = new DetailsViewModel()
             {
-                Product = _db.Product.Include(u => u.Category).Include(u => u.Application)
-                .Where(u => u.Id == id).FirstOrDefault(),
+                Product = _productRepository.FirstOrDefault(u=>u.Id==id,includeProperties:"Category,Application"),
                 ExistInCart = false
             };
             foreach (var item in shoppingCartList)
