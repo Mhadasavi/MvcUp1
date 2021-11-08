@@ -12,7 +12,7 @@ namespace MvcUp1.Controllers
         private readonly IInquiryHeaderRepository _inquiryHeaderRepository;
         private readonly IInquiryDetailRepository _inquiryDetailRepository;
 
-        public InquiryController(IInquiryDetailRepository inquiryDetailRepository,IInquiryHeaderRepository inquiryHeaderRepository)
+        public InquiryController(IInquiryDetailRepository inquiryDetailRepository, IInquiryHeaderRepository inquiryHeaderRepository)
         {
             _inquiryHeaderRepository = inquiryHeaderRepository;
             _inquiryDetailRepository = inquiryDetailRepository;
@@ -21,5 +21,13 @@ namespace MvcUp1.Controllers
         {
             return View();
         }
+
+        #region API Call
+        [HttpGet]
+        public IActionResult GetInquiryList()
+        {
+            return Json(new { data = _inquiryHeaderRepository.GetAll() });
+        }
+        #endregion
     }
 }

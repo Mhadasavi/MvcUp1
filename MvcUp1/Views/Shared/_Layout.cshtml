@@ -51,11 +51,19 @@
 
                                 </div>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white-50" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Inquiry Details
+                                </a>
+                                <div class="dropdown-menu bg-dark text-white-50" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item bg-dark text-white-50 " asp-area="" asp-controller="Inquiry" asp-action="Index">Inquiry</a>
+                                </div>
+                            </li>
                         }
                         <li>
                             @if (HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart) != null)
                             {
-                                <a class="nav-link text-white-50" asp-action="Index" asp-controller="Cart" >
+                                <a class="nav-link text-white-50" asp-action="Index" asp-controller="Cart">
                                     @{
                                         var count = HttpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart).Count;
                                     }
@@ -83,7 +91,7 @@
 
     <footer class="border-top footer text-muted bg-dark ">
         <div class="container text-white-50">
-            &copy; 2021 - MvcUp1 
+            &copy; 2021 - MvcUp1
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
