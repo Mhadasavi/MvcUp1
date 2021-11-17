@@ -16,3 +16,6 @@
   ViewModel can have specific validation rules using data annotations.
   It have multiple entities or objects from different data models or data source.
   It helps to implement strongly typed views.
+
+* When we add a model and want to push in db, we need to add an entry in ApplicationDbContext class.
+* We need to add register repository in startup class using services.AddScoped().
