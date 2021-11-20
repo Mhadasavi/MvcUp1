@@ -80,6 +80,11 @@ namespace MvcUp1_Data.Repository
             dbSet.Remove(entity);
         }
 
+        public void RemoveRange(IEnumerable<T> entity)
+        {
+            dbSet.RemoveRange(entity);
+        }
+
         public void Save()
         {
             _dbContext.SaveChanges();
