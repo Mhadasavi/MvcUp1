@@ -1,6 +1,7 @@
 ﻿@model MvcUp1_Model.ViewModel.InquiryVm;
 
     <form method="post">
+        <input asp-for="InquiryHeader.Id" hidden /> 
         <br />
         <div class="backgroundWhite container">
             <div class="card">
@@ -50,7 +51,7 @@
                                             </div>
 
                                             <div class="col">
-                                                <input type="submit" value="Delete" class="btn btn-danger form-control" />
+                                                <input type="submit" value="Delete" class="btn btn-danger form-control" formaction="/Inquiry/Delete" formmethod="post"/>
                                             </div>
                                         </div>
                                     </div>

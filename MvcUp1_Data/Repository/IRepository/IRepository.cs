@@ -23,6 +23,7 @@ namespace MvcUp1_Data.Repository.IRepository
             bool isTracking = true);
 
         void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entity);
         void Add(T entity);
         void Save();
     }
