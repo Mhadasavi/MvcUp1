@@ -86,9 +86,9 @@ namespace MvcUp1.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost([FromRoute]int? id)
+        public IActionResult DeletePost(int? Id)
         {
-            var Category = _categoryRepository.Find(id.GetValueOrDefault());
+            var Category = _categoryRepository.Find(Id.GetValueOrDefault());
             if (Category == null)
             {
                 return NotFound();

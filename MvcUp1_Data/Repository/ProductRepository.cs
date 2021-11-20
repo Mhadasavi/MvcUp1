@@ -22,7 +22,7 @@ namespace MvcUp1_Data.Repository
         {
             if (obj == WC.CategoryName)
             {
-                _db.Category.Select(i => new SelectListItem
+                return _db.Category.Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
@@ -30,7 +30,7 @@ namespace MvcUp1_Data.Repository
             }
             else if (obj == WC.ApplicationName)
             {
-                _db.Application.Select(i => new SelectListItem
+                return _db.Application.Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
