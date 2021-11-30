@@ -37,8 +37,10 @@ namespace MvcUp1.Controllers
             {
                 _categoryRepository.Add(category);
                 _categoryRepository.Save();
+                TempData[WC.Success] = "Category created successfully";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Error while creating category";
             return View(category);
         }
         //get
@@ -95,8 +97,10 @@ namespace MvcUp1.Controllers
             }
             _categoryRepository.Remove(Category);
             _categoryRepository.Save();
+            TempData[WC.Success] = "Category deleted successfully";
+           // TempData[WC.Error] = "Error while deleting category"; 
             return RedirectToAction("Index");
-
+            
         }
     }
 }
