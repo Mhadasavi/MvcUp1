@@ -14,5 +14,7 @@ namespace MvcUp1_Services
         public static string CustomerRole = "Customer";
         public static string CategoryName = "Category";
         public static string ApplicationName = "Application";
+        public const string Success = "Success";
+        public const string Error = "ApplicationType";
     }
 }
