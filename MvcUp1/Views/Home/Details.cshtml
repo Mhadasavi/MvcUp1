@@ -29,7 +29,22 @@
 
                                         <p class="text-secondary">@Html.Raw(@Model.Product.Description)</p>
                                     </div>
-
+                                    @if (User.IsInRole(MvcUp1_Services.WC.AdminRole))
+                                    {
+                                        <div class="col-12">
+                                            GB :
+                                        </div><div class="col-12">
+                                            @if (Model.ExistInCart)
+                                            {
+                                                <input asp-for="@Model.Product.TempGB" disabled class="form-control" />
+                                            }
+                                            else
+                                            {
+                                                <input asp-for="@Model.Product.TempGB" class="form-control" />
+                                                <span asp-validation-for="@Model.Product.TempGB" class="text-danger">   </span>
+                                            }
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

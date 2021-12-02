@@ -46,7 +46,7 @@ namespace MvcUp1.Controllers
 
             DetailsViewModel detailsViewModel = new DetailsViewModel()
             {
-                Product = _productRepository.FirstOrDefault(u=>u.Id==id,includeProperties:"Category,Application"),
+                Product = _productRepository.FirstOrDefault(u => u.Id == id, includeProperties: "Category,Application"),
                 ExistInCart = false
             };
             foreach (var item in shoppingCartList)
@@ -58,20 +58,20 @@ namespace MvcUp1.Controllers
             }
             return View(detailsViewModel);
         }
-        [HttpPost,ActionName("Details")]
-        public IActionResult DetailsPost([FromRoute] int id)
+        [HttpPost, ActionName("Details")]
+        public IActionResult DetailsPost([FromRoute] int id, DetailsViewModel detailsViewModel)
         {
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
-            if(HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart)!=null &&
+            if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null &&
                 HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
             {
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
-            shoppingCartList.Add(new ShoppingCart { ProductId = id });
+            shoppingCartList.Add(new ShoppingCart { ProductId = id, TempGB = detailsViewModel.Product.TempGB });
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
-        
+
         public IActionResult RemoveFromCart(int id)
         {
             List<ShoppingCart> shoppingCartsList = new List<ShoppingCart>();
