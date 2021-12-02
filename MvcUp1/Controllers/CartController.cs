@@ -50,7 +50,15 @@ namespace MvcUp1.Controllers
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
             List<int> productCartList = shoppingCartList.Select(i => i.ProductId).ToList();
-            IEnumerable<Product> prodList = _productRepository.GetAll(u => productCartList.Contains(u.Id));
+            IEnumerable<Product> prodListTemp = _productRepository.GetAll(u => productCartList.Contains(u.Id));
+            IList<Product> prodList = new List<Product>();
+            foreach(var cartObj in shoppingCartList)
+            {
+                Product product = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
+                product.TempGB = cartObj.TempGB;
+                prodList.Add(product);
+            }
+
             return View(prodList);
         }
 
