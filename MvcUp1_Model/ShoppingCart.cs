@@ -8,5 +8,6 @@ namespace MvcUp1_Model
     public class ShoppingCart
     {
         public int ProductId { get; set; }
+        public int TempGB { get; set; }
     }
 }

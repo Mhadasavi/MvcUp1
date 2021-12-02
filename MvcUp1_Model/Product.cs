@@ -9,6 +9,10 @@ namespace MvcUp1_Model
 {
     public class Product
     {
+        public Product()
+        {
+            TempGB = 1;
+        }
         [Key]
         public int Id { get; set; }
         [Required]
@@ -26,5 +30,8 @@ namespace MvcUp1_Model
         public int ApplicationId { get; set; }
         [ForeignKey("ApplicationId")]
         public virtual Application Application { get; set; }
+        [NotMapped]
+        [Range(1,10000)]
+        public int TempGB { get; set; }
     }
 }
