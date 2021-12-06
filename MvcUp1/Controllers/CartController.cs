@@ -65,8 +65,15 @@ namespace MvcUp1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Index")]
-        public IActionResult IndexPost()
+        public IActionResult IndexPost(IEnumerable<Product> ProdList)
         {
+            IList<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+
+            foreach (Product product in ProdList)
+            {
+                shoppingCartList.Add(new ShoppingCart { ProductId = product.Id, TempGB = product.TempGB });
+            }
+            HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Summary));
         }
         public IActionResult Summary()
@@ -159,6 +166,19 @@ namespace MvcUp1.Controllers
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(WC.SessionCart);
             }
             shoppingCartList.Remove(shoppingCartList.FirstOrDefault(u => u.ProductId == id));
+            HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateCart(IEnumerable<Product> ProdList)
+        {
+            IList<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
+            
+            foreach (Product product in ProdList)
+            {
+                shoppingCartList.Add(new ShoppingCart { ProductId=product.Id,TempGB=product.TempGB});
+            }
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
         }
