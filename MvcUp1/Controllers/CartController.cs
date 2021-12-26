@@ -55,7 +55,10 @@ namespace MvcUp1.Controllers
             foreach(var cartObj in shoppingCartList)
             {
                 Product product = prodListTemp.FirstOrDefault(u => u.Id == cartObj.ProductId);
-                product.TempGB = cartObj.TempGB;
+                if (cartObj.TempGB != 0)
+                {
+                    product.TempGB = cartObj.TempGB;
+                }
                 prodList.Add(product);
             }
 
@@ -78,9 +81,32 @@ namespace MvcUp1.Controllers
         }
         public IActionResult Summary()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            //var userId=User.FindFirstValue(ClaimTypes.Name); 
+            ApplicationUser applicationUser;
+            if (User.IsInRole(WC.AdminRole))
+            {
+                if (HttpContext.Session.Get<int>(WC.SessionInquiryId) != 0)
+                {
+                    //cart has been loaded using an inquiry
+                    InquiryHeader inquiryHeader = _inquiryHeaderRepository.FirstOrDefault(u => u.Id == HttpContext.Session.Get<int>(WC.SessionInquiryId));
+                    applicationUser = new ApplicationUser()
+                    {
+                        FullName = inquiryHeader.FullName,
+                        PhoneNumber = inquiryHeader.PhoneNumber
+                    };
+                }
+                else
+                {
+                    applicationUser = new ApplicationUser();
+                }
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                //var userId=User.FindFirstValue(ClaimTypes.Name); 
+
+                applicationUser = _applicationUserRepository.FirstOrDefault(u=>u.Id==claim.Value);
+            }
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart) != null &&
                 HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WC.SessionCart).Count() > 0)
@@ -92,10 +118,15 @@ namespace MvcUp1.Controllers
             IEnumerable<Product> prodList = _productRepository.GetAll(u => productCartList.Contains(u.Id));
             ProductUserVm = new ProductUserVM()
             {
-                ApplicationUser = _applicationUserRepository.FirstOrDefault(u => u.Id == claim.Value),
-                ProductList = prodList.ToList()
+                ApplicationUser = applicationUser,
+                
             };
-
+            foreach(var cartObject in shoppingCartList)
+            {
+                Product productTemp = _productRepository.FirstOrDefault(u => u.Id == cartObject.ProductId);
+                productTemp.TempGB = cartObject.TempGB;
+                ProductUserVm.ProductList.Add(productTemp);
+            }
             return View(ProductUserVm);
         }
         [HttpPost]
